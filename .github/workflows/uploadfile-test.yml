@@ -15,6 +15,6 @@ jobs:
             # Add your logic here if no files are found
           else
             for file in "${files[@]}"; do
-              curl -F file=@$GITHUB_WORKSPACE/$file -F channels=<YOUR_CHANNEL_ID> -F token=<YOUR_SLACK_TOKEN> https://slack.com/api/files.upload
+              curl -F file=@$GITHUB_WORKSPACE/$file -F channels=D05906C3VMG -F token=7Qx1vnOqsyFIuDqUzwRWZFAd https://slack.com/api/files.upload
             done
           fi
