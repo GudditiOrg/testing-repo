@@ -1,0 +1,20 @@
+name: uploadfile-test
+on: 
+  - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload Files to Slack
+        run: |
+          cd $GITHUB_WORKSPACE
+          files=(*)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No files found."
+            # Add your logic here if no files are found
+          else
+            for file in "${files[@]}"; do
+              curl -F file=@$file -F channels=${{ secrets.CHANNEL_ID }} -F token=${{ secrets.SLACK_BOT_TOKEN }} https://slack.com/api/files.upload
+            done
+          fi
