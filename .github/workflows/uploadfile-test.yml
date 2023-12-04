@@ -1,6 +1,6 @@
 name: uploadfile-test
 on: 
-  - main
+  push:
 
 jobs:
   test:
