@@ -1,14 +1,20 @@
-name: uploadfile-test
-on: 
-  push:
+name: op3n-unified-framework automation
+
+on:
+  workflow_dispatch:
+    inputs:
+      user_input:
+        description: 'Give input for specific tests selection'
+        required: true
+        default: 'testng_API'
+        options:
+          - 'hai'
+          - 'hello'
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Set up Chrome
-        uses: browser-actions/setup-chrome@v1
-      
-      - name: Run Chrome Headlessly
-        run: google-chrome-stable --version
+    timeout-minutes: 15
 
+    steps:
+      - run: echo "${{ github.event.inputs.user_input}}"
