@@ -6,9 +6,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Start Xvfb
-        run: |
-          sudo apt-get install -y xvfb
-          Xvfb :99 -screen 0 1024x768x24 &
-          export DISPLAY=:99
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@v1
+      
+      - name: Run Chrome Headlessly
+        run: google-chrome-stable --headless --version
 
