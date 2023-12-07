@@ -6,7 +6,6 @@ on:
       user_input:
         description: 'Give input for specific tests selection'
         required: true
-        default: 'testng_API'
         options:
           - 'hai'
           - 'hello'
