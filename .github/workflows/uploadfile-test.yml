@@ -17,3 +17,4 @@ jobs:
 
     steps:
       - run: echo "${{ github.event.inputs.user_input}}"
+      
