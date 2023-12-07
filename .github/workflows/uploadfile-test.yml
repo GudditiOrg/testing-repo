@@ -1,4 +1,4 @@
-name: Mixed inputs
+name: op3n-unified-framework automation
 
 on:
   workflow_dispatch:
@@ -12,9 +12,54 @@ on:
           - 'testng_v2_Web'
 
 jobs:
-  greet:
+  build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
-    - name: Send greeting
-      run: echo "${{ github.event.inputs.name }}"
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven
+          
+      - name: Maven version
+        run: mvn --version
+
+      - uses: nanasess/setup-chromedriver@v2
+      
+      - name: Chrome Driver with virtual display 
+        run: |
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & 
+
+      - name: Build with Maven
+        run: |
+          set -euxo pipefail
+          mvn test -DsuiteFile=${{ github.event.inputs.name }}
+          ls -ltr $GITHUB_WORKSPACE
+
+      - name: Create artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ExtentReports
+          path: ${{ github.workspace }}/ExtentReports
+  
+      - name: Upload Files to Slack
+        run: |
+          set -euxo pipefail
+          cd $GITHUB_WORKSPACE/ExtentReports
+          for file in *; do
+            curl -F file=@$file -F channels=${{ secrets.CHANNEL_ID }} -F token=${{ secrets.SLACK_BOT_TOKEN }} https://slack.com/api/files.upload
+          done
