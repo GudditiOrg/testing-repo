@@ -10,5 +10,5 @@ jobs:
         uses: browser-actions/setup-chrome@v1
       
       - name: Run Chrome Headlessly
-        run: google-chrome-stable --headless --version
+        run: google-chrome-stable --version
 
