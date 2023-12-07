@@ -1,20 +1,26 @@
-name: op3n-unified-framework automation
+name: Mixed inputs
 
 on:
   workflow_dispatch:
     inputs:
-      user_input:
-        description: 'Give input for specific tests selection'
+      name:
+        type: choice
+        description: Who to greet
+        options: 
+        - monalisa
+        - cschleiden
+      message:
         required: true
-        options:
-          - 'hai'
-          - 'hello'
+      use-emoji:
+        type: boolean
+        description: Include 🎉🤣 emojis
+      environment:
+        type: environment
 
 jobs:
-  build:
+  greet:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
 
     steps:
-      - run: echo "${{ github.event.inputs.user_input}}"
-      
+    - name: Send greeting
+      run: echo "${{ github.event.inputs.message }} ${{ fromJSON('["", "🥳"]')[github.event.inputs.use-emoji == 'true'] }} ${{ github.event.inputs.name }}"
